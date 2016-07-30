@@ -2,10 +2,11 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
-public class Gui extends JFrame implements ActionListener{
+public class Gui extends JFrame implements MouseListener{
 	
 	private MineButton[][] buttons;
 	
@@ -29,7 +30,7 @@ public class Gui extends JFrame implements ActionListener{
 			for(int col = 0; col <Config.COLS; col ++) {
 				MineButton button = new MineButton(row,col);
 				button.setBounds(col*SIZE,row*SIZE,SIZE,SIZE);
-				button.addActionListener(this);
+				button.addMouseListener(this);
 				buttons[row][col] = button;
 				panel.add(button);
 				
@@ -43,9 +44,39 @@ public class Gui extends JFrame implements ActionListener{
 	}
 
 
-	public void actionPerformed(ActionEvent e) {
+	@Override
+	public void mouseClicked(MouseEvent e) {
 		MineButton button = (MineButton)e.getSource();
-		boolean b = SwingUtilities.isLeftMouseButton((ActionEvent)e);
+		boolean b = SwingUtilities.isLeftMouseButton(e);
 		System.out.println(button.row + "  " + button.col + b);
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }
