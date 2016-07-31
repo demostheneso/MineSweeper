@@ -88,7 +88,7 @@ public class Gui extends JFrame implements MouseListener{
 	}
 	
 	public void win() {
-		lost = true;
+		gameStarted = false;;
 		label.setText("You Won");
 		mineTimer.stop();
 	}
@@ -107,6 +107,7 @@ public class Gui extends JFrame implements MouseListener{
 		} else {
 		MineButton button = (MineButton)e.getSource();
 		if(!button.clicked && !lost && gameStarted) {
+			System.out.println(lost);
 			if(SwingUtilities.isRightMouseButton(e)) {
 				if(button.flaged) {
 					flagsUsed--;
