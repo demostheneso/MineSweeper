@@ -23,6 +23,8 @@ public class Gui extends JFrame implements MouseListener{
 	private JLabel MineLabel;
 	private JLabel FlagLabel;
 	private int flagsUsed;
+	private JLabel timer;
+	private MineTimer mineTimer;
 	
 	public Gui(Game game) {
 		this.game = game;
@@ -45,7 +47,10 @@ public class Gui extends JFrame implements MouseListener{
 		FlagLabel = new JLabel("Flags: 0");
 		FlagLabel.setBounds(10, 25, 100, 15);
 		panel.add(FlagLabel);
-			
+		
+		timer = new JLabel();
+		timer.setBounds(225, 10, 110, 30);
+		panel.add(timer);	
 				
 		int number = 0;
 		for(int row = 0 ; row < Config.ROWS; row ++) {
@@ -85,6 +90,7 @@ public class Gui extends JFrame implements MouseListener{
 	public void win() {
 		lost = true;
 		label.setText("You Won");
+		mineTimer.stop();
 	}
 
 	
@@ -96,6 +102,8 @@ public class Gui extends JFrame implements MouseListener{
 			panel.remove(startButton);
 			repaint();
 			gameStarted = true;
+			mineTimer = new MineTimer(timer);
+			mineTimer.start();
 		} else {
 		MineButton button = (MineButton)e.getSource();
 		if(!button.clicked && !lost && gameStarted) {
@@ -115,6 +123,7 @@ public class Gui extends JFrame implements MouseListener{
 				lost = game.clicked(button.row,button.col);
 				if(lost == true) {
 					label.setText("You Lost!");
+					mineTimer.stop();
 				}
 				
 				
