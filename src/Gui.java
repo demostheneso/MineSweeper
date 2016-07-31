@@ -16,6 +16,8 @@ public class Gui extends JFrame implements MouseListener{
 	private final int SIZE = Config.BUTTON_SIZE;
 	private Game game;
 	private boolean lost = false;
+	private JPanel panel;
+	private JLabel label;
 	
 	public Gui(Game game) {
 		this.game = game;
@@ -24,9 +26,12 @@ public class Gui extends JFrame implements MouseListener{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		buttons = new MineButton[Config.ROWS][Config.COLS];
 		
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		getContentPane().add(panel);
 		panel.setLayout(null);
+		label = new JLabel();
+		label.setBounds(120, 5, 100, 50);
+		panel.add(label);
 		
 		
 		int number = 0;
@@ -56,6 +61,11 @@ public class Gui extends JFrame implements MouseListener{
 	public void addFlag(int row, int col, int number) {;
 		buttons[row][col].setLabel("F");
 	}
+	
+	public void win() {
+		lost = true;
+		label.setText("You Won");
+	}
 
 	
 
@@ -63,7 +73,7 @@ public class Gui extends JFrame implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		MineButton button = (MineButton)e.getSource();
-		if(!button.clicked) {
+		if(!button.clicked && !lost) {
 			if(SwingUtilities.isRightMouseButton(e)) {
 				if(button.flaged) {
 					button.setText("");
@@ -76,7 +86,7 @@ public class Gui extends JFrame implements MouseListener{
 				setClicked(button.row,button.col);
 				lost = game.clicked(button.row,button.col);
 				if(lost == true) {
-					//dolater
+					label.setText("You Lost!");
 				}
 				
 				
