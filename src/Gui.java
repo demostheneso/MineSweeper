@@ -16,8 +16,13 @@ public class Gui extends JFrame implements MouseListener{
 	private final int SIZE = Config.BUTTON_SIZE;
 	private Game game;
 	private boolean lost = false;
+	private boolean gameStarted = false;
 	private JPanel panel;
 	private JLabel label;
+	private JButton startButton;
+	private JLabel MineLabel;
+	private JLabel FlagLabel;
+	private int flagsUsed;
 	
 	public Gui(Game game) {
 		this.game = game;
@@ -33,7 +38,15 @@ public class Gui extends JFrame implements MouseListener{
 		label.setBounds(120, 5, 100, 50);
 		panel.add(label);
 		
+		MineLabel = new JLabel("Mines: "+ Config.MINES);
+		MineLabel.setBounds(10, 10, 100, 15);
+		panel.add(MineLabel);
 		
+		FlagLabel = new JLabel("Flags: 0");
+		FlagLabel.setBounds(10, 25, 100, 15);
+		panel.add(FlagLabel);
+			
+				
 		int number = 0;
 		for(int row = 0 ; row < Config.ROWS; row ++) {
 			for(int col = 0; col <Config.COLS; col ++) {
@@ -45,7 +58,14 @@ public class Gui extends JFrame implements MouseListener{
 				panel.add(button);
 				
 			}
-		}	
+		}
+		
+		startButton = new JButton("Start Game");
+		startButton.addMouseListener(this);
+		startButton.setActionCommand("start");
+		startButton.setBounds(100, 10, 110, 30);
+		panel.add(startButton);
+		
 	}
 	
 	public void addNumber(int row, int col, int number) {;
@@ -72,16 +92,24 @@ public class Gui extends JFrame implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		if(e.getSource() == startButton) {
+			panel.remove(startButton);
+			repaint();
+			gameStarted = true;
+		} else {
 		MineButton button = (MineButton)e.getSource();
-		if(!button.clicked && !lost) {
+		if(!button.clicked && !lost && gameStarted) {
 			if(SwingUtilities.isRightMouseButton(e)) {
 				if(button.flaged) {
+					flagsUsed--;
 					button.setText("");
 					button.flaged = false;
 				} else {
+					flagsUsed++;
 					button.setText("F");
 					button.flaged = true;
 				}
+				FlagLabel.setText("Flags: "+flagsUsed);
 			} else if(SwingUtilities.isLeftMouseButton(e) && button.flaged == false) {
 				setClicked(button.row,button.col);
 				lost = game.clicked(button.row,button.col);
@@ -90,7 +118,7 @@ public class Gui extends JFrame implements MouseListener{
 				}
 				
 				
-			}	
+			}}	
 		}
 	}
 	
