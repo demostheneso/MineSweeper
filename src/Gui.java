@@ -26,6 +26,10 @@ public class Gui extends JFrame implements MouseListener{
 	private JLabel timer;
 	private MineTimer mineTimer;
 	
+	public ImageIcon[] numbers;
+	public ImageIcon flag;
+	public ImageIcon mine;
+	
 	public Gui(Game game) {
 		this.game = game;
 		setTitle("MineSweeper");
@@ -65,6 +69,8 @@ public class Gui extends JFrame implements MouseListener{
 			}
 		}
 		
+		genIcons();
+		
 		startButton = new JButton("Start Game");
 		startButton.addMouseListener(this);
 		startButton.setActionCommand("start");
@@ -73,18 +79,43 @@ public class Gui extends JFrame implements MouseListener{
 		
 	}
 	
+	public void genIcons() {
+		numbers = new ImageIcon[8];
+		for(int i = 0; i < 8; i++) {
+			int num = i + 1;
+			String file = "images/MineSweeper-" + num + ".png";
+			numbers[i] = new ImageIcon(getClass().getResource(file));
+			
+		}
+		
+		flag = new ImageIcon(getClass().getResource("images/MineSweeper-flag.png"));
+		mine = new ImageIcon(getClass().getResource("images/MineSweeper-mine.png"));
+		
+	}
+	
 	public void addNumber(int row, int col, int number) {;
-		buttons[row][col].setLabel(Integer.toString(number));
+		buttons[row][col].setDisabledIcon(numbers[number-1]);
+		buttons[row][col].setIcon(numbers[number-1]);
+		
 	}
 	
 	public void setText(int row, int col, String text) {;
 		buttons[row][col].setLabel(text);
 	}
 	
+	public void addMine(int row, int col) {
+		buttons[row][col].setIcon(mine);
+		buttons[row][col].setDisabledIcon(mine);
+	}
+	
 
 	
-	public void addFlag(int row, int col, int number) {;
-		buttons[row][col].setLabel("F");
+	private void addFlag(int row, int col) {;
+		buttons[row][col].setIcon(flag);
+	}
+	
+	private void removeFlag(int row, int col) {;
+		buttons[row][col].setIcon(null);
 	}
 	
 	public void win() {
@@ -107,15 +138,14 @@ public class Gui extends JFrame implements MouseListener{
 		} else {
 		MineButton button = (MineButton)e.getSource();
 		if(!button.clicked && !lost && gameStarted) {
-			System.out.println(lost);
 			if(SwingUtilities.isRightMouseButton(e)) {
 				if(button.flaged) {
 					flagsUsed--;
-					button.setText("");
+					removeFlag(button.row,button.col);
 					button.flaged = false;
 				} else {
 					flagsUsed++;
-					button.setText("F");
+					addFlag(button.row,button.col);
 					button.flaged = true;
 				}
 				FlagLabel.setText("Flags: "+flagsUsed);

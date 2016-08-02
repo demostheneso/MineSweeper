@@ -101,7 +101,7 @@ public class Game {
 			for(int r = 0 ; r < Config.ROWS ; r ++) {
 				for(int c = 0 ; c < Config.COLS; c ++) {
 					if(grid[r][c] == -1) {
-						gui.setText(r, c, "M");
+						gui.addMine(r,c);
 					}
 				}
 			}
